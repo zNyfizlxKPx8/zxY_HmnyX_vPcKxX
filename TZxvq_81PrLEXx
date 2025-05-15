@@ -103,9 +103,11 @@
 local allowedNames = {
   "La Galiana",  -- Charlix
   "Feniix",
- "[DNT] Chs lloroneskreportan",  -- tostichos
- "Neo Knight",  -- tostichos
-  "name",
+  "[DNT] Chs lloroneskreportan",  -- tostichos
+  "Neo Knight",  -- tostichos
+  "Power abused",  -- Power Noxious
+  "Pow Power",  -- Power Noxious
+  "Ilegal God",  -- Power Noxious
   "name",
   "name",
   "name",
