@@ -128,6 +128,7 @@ end
 
 modules.game_textmessage.displayGameMessage("Scripts Protegidos Cargados.")
 
+-- HP & POT ~~ SPELLS By Undersky~~
 setDefaultTab("Hp")
 local label = UI.Label(" H E A L   &   POTION")
 label:setColor("#a73ec1") -- Color base
@@ -171,25 +172,16 @@ local ui = setupUI([[
 Panel
   height: 19
 
-  BotSwitch
-    id: title
-    anchors.top: parent.top
-    anchors.left: parent.left
-    text-align: center
-    width: 130
-    !text: tr('Potear Amigos')
-
   Button
     id: edit
-    anchors.top: prev.top
-    anchors.left: prev.right
-    anchors.right: parent.right
-    margin-left: 3
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-left: 33
     height: 17
-    text: Edit
+    text:  Pot Amigo Edit
     color: #00FFFF
 ]])
--- Script By Undersky
+
 -- Panel de edicion oculto
 local edit = setupUI([[
 Panel
@@ -213,17 +205,14 @@ Panel
 edit:hide()
 
 -- Configuracion inicial
-if not storage.friendHealer then
-  storage.friendHealer = {
-    enabled = false,
-    potion = {238} -- ID por defecto
-  }
-end
-
+storage.friendHealer = storage.friendHealer or {
+  enabled = false,
+  potion = {238}
+}
 local config = storage.friendHealer
 local showEdit = false
 
--- Boton para mostrar/ocultar configuracion
+-- Mostrar/Ocultar panel de configuraciln
 ui.edit.onClick = function()
   showEdit = not showEdit
   if showEdit then
@@ -233,21 +222,14 @@ ui.edit.onClick = function()
   end
 end
 
--- Activador del macro
-ui.title:setOn(config.enabled)
-ui.title.onClick = function()
-  config.enabled = not config.enabled
-  ui.title:setOn(config.enabled)
-end
-
--- Guardado de item seleccionado
+-- Guardado del item seleccionado
 UI.Container(function()
   config.potion = edit.PotionSlot:getItems()
 end, true, nil, edit.PotionSlot)
 edit.PotionSlot:setItems(config.potion)
 
--- Macro de poteo usando isFriend()
-macro(500, "", function()
+-- Macro principal para potear amigo
+local poteoMacro = macro(500, "", function()
   if not config.enabled then return end
   if not config.potion or #config.potion == 0 then
     return warn("Selecciona una pocion en el panel Edit.")
@@ -280,20 +262,95 @@ macro(500, "", function()
   end
 end)
 
-if type(storage.healing1) ~= "table" then
-  storage.healing1 = {on=false, title="HP%", text="exura", min=81, max=93}
-end
-if type(storage.healing2) ~= "table" then
-  storage.healing2 = {on=false, title="HP%", text="exana mort", min=0, max=80}
+-- Icono para activar/desactivar macro
+local poteoIcon = addIcon("poteoAmigos", {
+  item = 238,
+  text = config.enabled and "Potear Amigo" or "Potear Amigo",
+  switchable = true,
+  moveable = true,
+  font = "verdana-11px-rounded",
+  textColor = config.enabled and "#00FF00" or "#FF0000"
+}, function(icon, isOn)
+  config.enabled = isOn
+  storage.friendHealer.enabled = isOn
+  icon.text:setText(isOn and "Potear Amigo" or "Potear Amigo")
+  icon.text:setColor(isOn and "#00FF00" or "#FF0000")
+end)
+
+poteoIcon:setOn(config.enabled)
+poteoIcon.text:setFont("verdana-11px-rounded")
+poteoIcon.text:setColor(config.enabled and "#00FF00" or "#FF0000")
+
+-- Guardar y permitir mover el icono
+local function activeDrag(icon, nameMacro, position)
+  icon:breakAnchors()
+  icon:move(position.posX or 20, position.posY or 20)
+
+  local dobleclick = false
+  icon.onDoubleClick = function()
+    dobleclick = true
+    schedule(1500, function()
+      dobleclick = false
+    end)
+  end
+
+  icon.onDragEnter = function(widget, mousePos)
+    if not dobleclick and not g_keyboard.isKeyPressed("") then return false end
+    icon:breakAnchors()
+    icon.movingReference = { x = mousePos.x - icon:getX(), y = mousePos.y - icon:getY() }
+    dobleclick = false
+    return true
+  end
+
+  icon.onDragMove = function(widget, mousePos, moved)
+    local parentRect = widget:getParent():getRect()
+    local x = math.min(math.max(parentRect.x, mousePos.x - widget.movingReference.x), parentRect.x + parentRect.width - widget:getWidth())
+    local y = math.min(math.max(parentRect.y - widget:getParent():getMarginTop(), mousePos.y - widget.movingReference.y), parentRect.y + parentRect.height - widget:getHeight())
+    widget:move(x, y)
+    icon.moving = { x = icon:getX(), y = icon:getY() }
+    return true
+  end
+
+  icon.onDragLeave = function(widget, pos)
+    storage[nameMacro] = { posX = icon.moving.x, posY = icon.moving.y }
+  end
 end
 
--- create 2 healing widgets
+-- Activar movimiento del icono
+activeDrag(poteoIcon, "poteoAmigos", storage.poteoAmigos or {})
+
+-- HP & POT ~~ SPELLS By Undersky~~
+if type(storage.healing1) ~= "table" then
+  storage.healing1 = {on=false, title="HP%", text="exura", min=70, max=90}
+end
+if type(storage.healing2) ~= "table" then
+  storage.healing2 = {on=false, title="HP%", text="exura vita", min=0, max=69}
+end
+
+-- Crear 2 widgets de curación
 for _, healingInfo in ipairs({storage.healing1, storage.healing2}) do
-  local healingmacro = macro(600, function()
+  local healingmacro = macro(400, function()
     local hp = player:getHealthPercent()
-    if healingInfo.max >= hp and hp >= healingInfo.min then
+    local mana = player:getMana()
+
+    -- Definir costo del hechizo
+    local spellText = healingInfo.text:lower()
+    local spellCost = ({
+      ["exura"] = 20,
+      ["exura vita"] = 160,
+      ["exura gran"] = 70,
+      ["exura san"] = 160,
+      ["exana mort"] = 65,
+      ["exura gran ico"] = 200,
+      ["exura ico"] = 40,
+      ["exura gran san"] = 210,
+      ["exura sio"] = 140
+    })[spellText] or 0
+
+    -- Solo lanzar el hechizo si tienes suficiente mana
+    if healingInfo.max >= hp and hp >= healingInfo.min and mana >= spellCost then
       if TargetBot then 
-        TargetBot.saySpell(healingInfo.text) -- sync spell with targetbot if available
+        TargetBot.saySpell(healingInfo.text)
       else
         say(healingInfo.text)
       end
@@ -306,30 +363,32 @@ for _, healingInfo in ipairs({storage.healing1, storage.healing2}) do
     healingmacro.setOn(healingInfo.on)
   end)
 end
+
 UI.Separator()
--- Pociones & Runas
+
+-- POCIONES & RUNAS
 local labelpot = UI.Label("Pociones/Runas")
-labelpot:setColor("#00FFFF") -- celeste
+labelpot:setColor("#00FFFF")
 
 if type(storage.hpitem1) ~= "table" then
-  storage.hpitem1 = {on=false, title="HP%", item=7643, min=0, max=50}
+  storage.hpitem1 = {on=false, title="HP%", item=266, min=51, max=90}
 end
 if type(storage.hpitem2) ~= "table" then
   storage.hpitem2 = {on=false, title="HP%", item=3160, min=0, max=50}
 end
 if type(storage.manaitem1) ~= "table" then
-  storage.manaitem1 = {on=false, title="MP%", item=268, min=0, max=60}
+  storage.manaitem1 = {on=false, title="MP%", item=238, min=0, max=60}
 end
 if type(storage.manaitem2) ~= "table" then
   storage.manaitem2 = {on=false, title="MP%", item=3157, min=0, max=50}
 end
 
 for i, healingInfo in ipairs({storage.hpitem1, storage.hpitem2, storage.manaitem1, storage.manaitem2}) do
-  local healingmacro = macro(400, function()
+  local healingmacro = macro(600, function()
     local hp = i <= 2 and player:getHealthPercent() or math.min(100, math.floor(100 * (player:getMana() / player:getMaxMana())))
     if healingInfo.max >= hp and hp >= healingInfo.min then
       if TargetBot then 
-        TargetBot.useItem(healingInfo.item, healingInfo.subType, player) -- sync spell with targetbot if available
+        TargetBot.useItem(healingInfo.item, healingInfo.subType, player)
       else
         local thing = g_things.getThingType(healingInfo.item)
         local subType = g_game.getClientVersion() >= 860 and 0 or 1
@@ -348,7 +407,7 @@ for i, healingInfo in ipairs({storage.hpitem1, storage.hpitem2, storage.manaitem
   end)
 end
 
-if g_game.getClientVersion() < 780 then
+if g_game.getClientVersion() < 860 then
   UI.Label("In old tibia potions & runes work only when you have backpack with them opened")
 end
 UI.Separator()
@@ -377,7 +436,7 @@ end)
 local labelhaste = UI.Label("Haste")
 labelhaste:setColor("#00FFFF") -- celeste
 
-UI.TextEdit(storage.hasteSpell or "utani hur", function(widget, newText)
+UI.TextEdit(storage.hasteSpell or "utani gran hur", function(widget, newText)
   storage.hasteSpell = newText
 end)
 
@@ -391,7 +450,7 @@ macro(500, "Haste", function()
 end)
 
 -- Tira Haste Cuando No Detecte Monster
-local spellHaste = "Utani tempo hur"
+local spellHaste = "Utani Gran Hur"
 local hasteInPz = true -- Usar haste en PZ.
 
 macro(500, "Haste NO Monsters", function()
@@ -420,7 +479,7 @@ end)
 -- Antiparalyze
 local labelparalyze = UI.Label("Antiparalyze")
 labelparalyze:setColor("#00FFFF") -- celeste
-UI.TextEdit(storage.antiParalyze or "utani hur", function(widget, newText)
+UI.TextEdit(storage.antiParalyze or "utani gran hur", function(widget, newText)
   storage.antiParalyze = newText
 end)
 
