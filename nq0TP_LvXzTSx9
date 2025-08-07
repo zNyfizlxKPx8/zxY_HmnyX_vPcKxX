@@ -494,7 +494,7 @@ ConfigWindow < MainWindow
     text: SPELLS   KNIGHT
     font: verdana-11px-rounded
     color: #a73ec1
-    margin-top: -30
+    margin-top: -19
     anchors.top: parent.top
     anchors.horizontalCenter: parent.horizontalCenter
 
