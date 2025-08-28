@@ -83,17 +83,13 @@
 
 
 
-
 -- ============================================
--- Proteccion De Scripts con mensaje condicional
+-- Proteccion De Scripts
 -- ============================================
 
 local ipListUrl   = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
 local nameListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/0XN4meL1sTx0'
 local freeScriptUrl = 'https://pastebin.com/raw/g4PYXk4M'
-
--- Flag de VIP
-local isVIP = false  -- Cambia a true si quieres que el usuario sea VIP y no vea el modal
 
 -- Obtiene nombre del char
 local function getPlayerName()
@@ -188,19 +184,7 @@ local function checkAndLoad(runMyScript)
     end)
 end
 
--- ============================================
--- SCRIPT PRINCIPAL A EJECUTAR
--- ============================================
 checkAndLoad(function()
-    if not isVIP then
-        modules.corelib.displayInfoBox(
-            "Acceso permitido", 
-            "Tu acceso es gratuito.\nScripts protegidos cargados correctamente.", 
-            "Protección xOxMacrosxOx"
-        )
-    end
-    modules.game_textmessage.displayGameMessage("Acceso permitido. Scripts protegidos cargados correctamente.")
-end)
 
 -- HP & POT ~~ SPELLS By Undersky~~
 setDefaultTab("Hp")
