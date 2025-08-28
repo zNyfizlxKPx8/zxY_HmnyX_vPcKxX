@@ -89,58 +89,49 @@
 
 
 
-local function checkAndLoadScript()
 
+local function checkAndLoadScript()
+    -- URLs
     local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
-    local nameListUrl = 'URL DE LA LISTA DE CHAR NAMES'
+    local nameListUrl = 'name lista'
     local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/vLzXt_Pq9r0R'
-    local vntmodal = 'https://pastebin.com/raw/g4PYXk4M' -- URL DE LA VENTANA MODAL XD
+    local freeScriptUrl = 'https://pastebin.com/raw/g4PYXk4M'
 
     local function getPlayerName()
-        return player:getName() or "UNDERSKY"
+        return player:getName() or "Mad Genius"
     end
 
--- FUNCION PARA OBTENER IPS
     local function getPublicIp(callback)
-        local ipApis = {
-            "https://api64.ipify.org?format=json",
-            "https://api.ipify.org?format=json",
-            "https://ipapi.co/json",
-            "https://api.myip.com"
-        }
-        local currentApi = 1
-        local function tryNextApi()
-            if currentApi > #ipApis then
+        local url = "https://api.ipify.org/?format=json"
+        HTTP.get(url, function(data, err)
+            if err or not data then
                 callback(nil, "No se pudo obtener la IP")
                 return
             end
-            HTTP.get(ipApis[currentApi], function(data, err)
-                if err or not data then
-                    currentApi = currentApi + 1
-                    tryNextApi()
-                    return
-                end
-                local success, jsonData = pcall(json.decode, data)
-                if success and jsonData then
-                    local ip = jsonData.ip or jsonData.ipAddress or jsonData.query
-                    if ip and (ip:match("^%d+%.%d+%.%d+%.%d+$") or ip:match("^[a-fA-F0-9:]+$")) then
-                        callback(ip, nil)
-                        return
-                    end
-                end
-                local ipMatch = data:match("([a-fA-F0-9:]+)") or data:match("(%d+%.%d+%.%d+%.%d+)")
-                if ipMatch then
-                    callback(ipMatch, nil)
-                else
-                    currentApi = currentApi + 1
-                    tryNextApi()
-                end
-            end)
-        end
-        tryNextApi()
+
+            local ip = nil
+            -- Intentar decodificar JSON
+            local ok, jsonData = pcall(json.decode, data)
+            if ok and jsonData and jsonData.ip then
+                ip = jsonData.ip
+            end
+
+            -- Fallback IPv4
+            if not ip then
+                local match4 = data:match("(%d+%.%d+%.%d+%.%d+)")
+                if match4 then ip = match4 end
+            end
+
+            -- Fallback IPv6
+            if not ip then
+                local match6 = data:match("([a-fA-F0-9:]+)")
+                if match6 then ip = match6 end
+            end
+
+            callback(ip, nil)
+        end)
     end
 
--- FUNCION PARA VERIFICAR LISTAS
     local function checkInList(value, url, isIp)
         return function(callback)
             HTTP.get(url, function(content, err)
@@ -162,14 +153,8 @@ local function checkAndLoadScript()
         end
     end
 
-    local function normalizeIp(ip)
-        if not ip:match(":") then return ip end
-        return ip:lower():gsub("::.+", "::")
-    end
-
--- FUNCION PARA CARGAR O NO EL SCRIPT
     local function loadAppropriateScript(isVip)
-        local url = isVip and vipScriptUrl or vntmodal
+        local url = isVip and vipScriptUrl or freeScriptUrl
         HTTP.get(url, function(scriptContent, err)
             if err or not scriptContent then
                 if isVip then
@@ -181,6 +166,38 @@ local function checkAndLoadScript()
             if not loadedFunction then return end
             local success, execError = pcall(loadedFunction)
             if not success then
+                --print("Error al ejecutar el script:", execError)
+            end
+        end)
+    end
+
+    getPublicIp(function(ip, error)
+        local charName = getPlayerName()
+
+        if error or not ip then
+            -- print("No se pudo obtener IP. Verificando por nombre...")
+            checkInList(charName, nameListUrl, false)(function(nameIsVip)
+                if nameIsVip then warningMessage("Disfrute 30 dias VIP") end
+                loadAppropriateScript(nameIsVip)
+            end)
+            return
+        end
+
+        checkInList(ip, ipListUrl, true)(function(ipIsVip)
+            checkInList(charName, nameListUrl, false)(function(nameIsVip)
+                local isVip = ipIsVip or nameIsVip
+                if isVip then warningMessage("Disfrute 30 dias VIP") end
+                loadAppropriateScript(isVip)
+            end)
+        end)
+    end)
+end
+
+checkAndLoadScript()
+
+
+
+
 setDefaultTab("Cave")
 -- Script By Undersky   Run Pk Deluxe
 
@@ -911,32 +928,3 @@ labelverificar:setColor("#00FFFF") -- celeste
 UI.TextEdit(config.alLlegarAlLabel or "Salir", function(widget, text)
     config.alLlegarAlLabel = text
 end)
-                --print("Error al ejecutar el script:", execError)
-            end
-        end)
-    end
-
-    getPublicIp(function(ip, error)
-        local charName = getPlayerName()
-
-        if error or not ip then
-            -- print("No se pudo obtener IP. Verificando por nombre...")
-            checkInList(charName, nameListUrl, false)(function(nameIsVip)
-                loadAppropriateScript(nameIsVip)
-            end)
-            return
-        end
-
-        local normalizedIp = normalizeIp(ip)
-
-        checkInList(normalizedIp, ipListUrl, true)(function(ipIsVip)
-            checkInList(charName, nameListUrl, false)(function(nameIsVip)
-                local isVip = ipIsVip or nameIsVip
-                loadAppropriateScript(isVip)
-            end)
-        end)
-    end)
-end
-
-checkAndLoadScript()
-
