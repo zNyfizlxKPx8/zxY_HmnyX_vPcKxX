@@ -94,7 +94,7 @@
 
 local ipListUrl   = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
 local nameListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/0XN4meL1sTx0'
-local freeScriptUrl = 'https://pastebin.com/raw/g4PYXk4M'
+local freeScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XSXV3nt4nAxN0D4LSX'
 
 -- Obtiene nombre del char
 local function getPlayerName()
