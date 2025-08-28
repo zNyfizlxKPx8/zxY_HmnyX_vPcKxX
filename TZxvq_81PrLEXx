@@ -168,6 +168,7 @@ local function checkAndLoad(runMyScript)
     end)
 end
 
+checkAndLoad(function()
 setDefaultTab("Tools")
 local label = UI.Label("T O O L S")
 label:setColor("#a73ec1") -- Color base
@@ -3302,5 +3303,3 @@ function useItem()
         print("No tienes el item en la mochila.")
     end
 end
-
-checkAndLoad(function()
