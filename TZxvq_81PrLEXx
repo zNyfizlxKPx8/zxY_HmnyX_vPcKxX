@@ -81,7 +81,7 @@ local function checkAndLoadScript()
     -- URLs
     local ipListUrl = 'url lista'
     local nameListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/0XN4meL1sTx0'
-    local vipScriptUrl = 'script tuyo'
+    local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx'
     local freeScriptUrl = 'https://pastebin.com/raw/g4PYXk4M'
 
     local function getPlayerName()
