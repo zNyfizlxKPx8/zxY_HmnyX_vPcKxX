@@ -94,7 +94,7 @@ local function checkAndLoadScript()
 
     local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
     local nameListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/0XN4meL1sTx0'
-    local vipScriptUrl = 'URL QUE CARGA EL SCRIPT PRINCIPAL'
+    local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx'
     local vntmodal = 'https://pastebin.com/raw/g4PYXk4M' -- URL DE LA VENTANA MODAL XD
 
     local function getPlayerName()
@@ -210,7 +210,6 @@ local function checkAndLoadScript()
 end
 
 checkAndLoadScript()
-
 
 -- scripts 
 
@@ -1543,6 +1542,7 @@ onContainerOpen(setFrames)
 onAddItem(setFrames)
 onRemoveItem(setFrames)
 onContainerUpdateItem(setFrames)
+
 
 
 
