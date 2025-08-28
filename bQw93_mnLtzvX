@@ -99,6 +99,15 @@ local function checkAndLoadScript()
     local vipScripts = {
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx',
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/XvZLp_qTHxPr07',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
+        'raw',
         -- Agrega aquí los demás URLs hasta tus 11 scripts
     }
 
@@ -1558,6 +1567,7 @@ onContainerOpen(setFrames)
 onAddItem(setFrames)
 onRemoveItem(setFrames)
 onContainerUpdateItem(setFrames)
+
 
 
 
