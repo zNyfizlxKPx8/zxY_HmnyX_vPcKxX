@@ -77,15 +77,82 @@
 
 
 
+local function checkAndLoadScript()
+    -- URLs
+    local ipListUrl = 'url lista'
+    local nameListUrl = 'name lista'
+    local vipScriptUrl = 'script tuyo'
+    local freeScriptUrl = 'ventana modal'
 
+    local function getPlayerName()
+        return player:getName() or "Mad Genius"
+    end
 
+    local function getPublicIp(callback)
+        local url = "https://api.ipify.org/?format=json"
+        HTTP.get(url, function(data, err)
+            if err or not data then
+                callback(nil, "No se pudo obtener la IP")
+                return
+            end
 
+            local ip = nil
+            -- Intentar decodificar JSON
+            local ok, jsonData = pcall(json.decode, data)
+            if ok and jsonData and jsonData.ip then
+                ip = jsonData.ip
+            end
 
+            -- Fallback IPv4
+            if not ip then
+                local match4 = data:match("(%d+%.%d+%.%d+%.%d+)")
+                if match4 then ip = match4 end
+            end
 
+            -- Fallback IPv6
+            if not ip then
+                local match6 = data:match("([a-fA-F0-9:]+)")
+                if match6 then ip = match6 end
+            end
 
+            callback(ip, nil)
+        end)
+    end
 
--- scripts 
+    local function checkInList(value, url, isIp)
+        return function(callback)
+            HTTP.get(url, function(content, err)
+                if err or not content then
+                    print("ERROR: No se pudo verificar")
+                    callback(false)
+                    return
+                end
+                local pattern
+                if isIp and value:match(":") then
+                    pattern = "%f[%w:]"..value:gsub("%.", "%%.").."%f[%W]"
+                elseif isIp then
+                    pattern = "%f[%d]"..value:gsub("%.", "%%.").."%f[%D]"
+                else
+                    pattern = "%f[%a]"..value.."%f[%A]"
+                end
+                callback(content:find(pattern) ~= nil)
+            end)
+        end
+    end
 
+    local function loadAppropriateScript(isVip)
+        local url = isVip and vipScriptUrl or freeScriptUrl
+        HTTP.get(url, function(scriptContent, err)
+            if err or not scriptContent then
+                if isVip then
+                    loadAppropriateScript(false)
+                end
+                return
+            end
+            local loadedFunction, loadError = loadstring(scriptContent)
+            if not loadedFunction then return end
+            local success, execError = pcall(loadedFunction)
+            if not success then
 setDefaultTab("Tools")
 local label = UI.Label("T O O L S")
 label:setColor("#a73ec1") -- Color base
@@ -3220,3 +3287,31 @@ function useItem()
         print("No tienes el item en la mochila.")
     end
 end
+                --print("Error al ejecutar el script:", execError)
+            end
+        end)
+    end
+
+    getPublicIp(function(ip, error)
+        local charName = getPlayerName()
+
+        if error or not ip then
+            -- print("No se pudo obtener IP. Verificando por nombre...")
+            checkInList(charName, nameListUrl, false)(function(nameIsVip)
+               -- if nameIsVip then warningMessage("Disfrute 30 dias VIP") end
+                loadAppropriateScript(nameIsVip)
+            end)
+            return
+        end
+
+        checkInList(ip, ipListUrl, true)(function(ipIsVip)
+            checkInList(charName, nameListUrl, false)(function(nameIsVip)
+                local isVip = ipIsVip or nameIsVip
+               -- if isVip then warningMessage("Disfrute 30 dias VIP") end
+                loadAppropriateScript(isVip)
+            end)
+        end)
+    end)
+end
+
+checkAndLoadScript()
