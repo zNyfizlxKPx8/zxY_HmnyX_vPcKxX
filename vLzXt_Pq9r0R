@@ -92,7 +92,7 @@
 
 local function checkAndLoadScript()
     -- URLs
-    local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
+    local ipListUrl = 'ip list'
     local nameListUrl = 'name lista'
     local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/vLzXt_Pq9r0R'
     local freeScriptUrl = 'https://pastebin.com/raw/g4PYXk4M'
