@@ -92,7 +92,7 @@ local function checkAndLoadScript()
 
     local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
     local nameListUrl = 'URL DE LA LISTA DE CHAR NAMES'
-    local vipScriptUrl = 'URL QUE CARGA EL SCRIPT PRINCIPAL'
+    local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/kqdeP_LoXz9W'
     local vntmodal = 'https://pastebin.com/raw/g4PYXk4M' -- URL DE LA VENTANA MODAL XD
 
     local function getPlayerName()
