@@ -106,7 +106,7 @@ local function checkAndLoadScript()
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/nq0TP_LvXzTSx9',
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/qXpL_09zAbTrv',
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/rXtp_0Lv9ExZq',
-        'raw',
+        'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/tQp9_LVzXSM03',
         'raw',
         -- Agrega aquí los demás URLs hasta tus 11 scripts
     }
@@ -1567,6 +1567,7 @@ onContainerOpen(setFrames)
 onAddItem(setFrames)
 onRemoveItem(setFrames)
 onContainerUpdateItem(setFrames)
+
 
 
 
