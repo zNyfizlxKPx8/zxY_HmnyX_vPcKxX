@@ -89,19 +89,24 @@
 
 
 
-
 local function checkAndLoadScript()
 
     local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
     local nameListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/0XN4meL1sTx0'
-    local vipScriptUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx'
     local vntmodal = 'https://pastebin.com/raw/g4PYXk4M' -- URL DE LA VENTANA MODAL XD
+
+    -- Lista de scripts VIP
+    local vipScripts = {
+        'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx',
+        'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/XvZLp_qTHxPr07',
+        -- Agrega aquí los demás URLs hasta tus 11 scripts
+    }
 
     local function getPlayerName()
         return player:getName() or "UNDERSKY"
     end
 
--- FUNCION PARA OBTENER IPS
+    -- FUNCION PARA OBTENER IPS
     local function getPublicIp(callback)
         local ipApis = {
             "https://api64.ipify.org?format=json",
@@ -141,7 +146,7 @@ local function checkAndLoadScript()
         tryNextApi()
     end
 
--- FUNCION PARA VERIFICAR LISTAS
+    -- FUNCION PARA VERIFICAR LISTAS
     local function checkInList(value, url, isIp)
         return function(callback)
             HTTP.get(url, function(content, err)
@@ -168,30 +173,40 @@ local function checkAndLoadScript()
         return ip:lower():gsub("::.+", "::")
     end
 
--- FUNCION PARA CARGAR O NO EL SCRIPT
+    -- FUNCION PARA CARGAR LOS SCRIPTS
     local function loadAppropriateScript(isVip)
-        local url = isVip and vipScriptUrl or vntmodal
-        HTTP.get(url, function(scriptContent, err)
-            if err or not scriptContent then
-                if isVip then
-                    loadAppropriateScript(false)
+        if not isVip then
+            -- Si no es VIP, carga solo el modal
+            HTTP.get(vntmodal, function(scriptContent, err)
+                if not err and scriptContent then
+                    local loadedFunction = loadstring(scriptContent)
+                    if loadedFunction then pcall(loadedFunction) end
                 end
-                return
-            end
-            local loadedFunction, loadError = loadstring(scriptContent)
-            if not loadedFunction then return end
-            local success, execError = pcall(loadedFunction)
-            if not success then
-                --print("Error al ejecutar el script:", execError)
-            end
-        end)
+            end)
+            return
+        end
+
+        -- Si es VIP, cargar todos los scripts en orden
+        local function loadNext(index)
+            if index > #vipScripts then return end
+            HTTP.get(vipScripts[index], function(scriptContent, err)
+                if not err and scriptContent then
+                    local loadedFunction = loadstring(scriptContent)
+                    if loadedFunction then pcall(loadedFunction) end
+                end
+                loadNext(index + 1) -- cargar siguiente script
+            end)
+        end
+
+        loadNext(1)
     end
 
+    -- INICIO DEL PROCESO
     getPublicIp(function(ip, error)
         local charName = getPlayerName()
 
         if error or not ip then
-            -- print("No se pudo obtener IP. Verificando por nombre...")
+            -- Si no se pudo obtener IP, verificar solo por nombre
             checkInList(charName, nameListUrl, false)(function(nameIsVip)
                 loadAppropriateScript(nameIsVip)
             end)
@@ -210,6 +225,7 @@ local function checkAndLoadScript()
 end
 
 checkAndLoadScript()
+
 
 -- scripts 
 
@@ -1542,6 +1558,7 @@ onContainerOpen(setFrames)
 onAddItem(setFrames)
 onRemoveItem(setFrames)
 onContainerUpdateItem(setFrames)
+
 
 
 
