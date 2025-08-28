@@ -99,7 +99,7 @@ local function checkAndLoadScript()
     local vipScripts = {
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/TZxvq_81PrLEXx',
         'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/XvZLp_qTHxPr07',
-        'raw',
+        'https://raw.githubusercontent.com/zNyfizlxKPx8/zxY_HmnyX_vPcKxX/refs/heads/main/Zx7vL_Ptq0SPzx',
         'raw',
         'raw',
         'raw',
@@ -1567,6 +1567,7 @@ onContainerOpen(setFrames)
 onAddItem(setFrames)
 onRemoveItem(setFrames)
 onContainerUpdateItem(setFrames)
+
 
 
 
