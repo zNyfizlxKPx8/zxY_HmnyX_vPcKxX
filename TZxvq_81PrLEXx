@@ -3297,3 +3297,5 @@ function useItem()
         print("No tienes el item en la mochila.")
     end
 end
+
+end)
