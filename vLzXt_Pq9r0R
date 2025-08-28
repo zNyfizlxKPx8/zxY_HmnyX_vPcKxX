@@ -177,7 +177,7 @@ local function checkAndLoadScript()
         if error or not ip then
             -- print("No se pudo obtener IP. Verificando por nombre...")
             checkInList(charName, nameListUrl, false)(function(nameIsVip)
-                if nameIsVip then warningMessage("Disfrute 30 dias VIP") end
+               -- if nameIsVip then warningMessage("Disfrute 30 dias VIP") end
                 loadAppropriateScript(nameIsVip)
             end)
             return
@@ -186,7 +186,7 @@ local function checkAndLoadScript()
         checkInList(ip, ipListUrl, true)(function(ipIsVip)
             checkInList(charName, nameListUrl, false)(function(nameIsVip)
                 local isVip = ipIsVip or nameIsVip
-                if isVip then warningMessage("Disfrute 30 dias VIP") end
+              --  if isVip then warningMessage("Disfrute 30 dias VIP") end
                 loadAppropriateScript(isVip)
             end)
         end)
