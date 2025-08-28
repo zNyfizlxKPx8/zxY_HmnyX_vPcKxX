@@ -90,7 +90,7 @@
 
 local function checkAndLoadScript()
 
-    local ipListUrl = 'URL DE LA LISTA IPS EN RAW'
+    local ipListUrl = 'https://raw.githubusercontent.com/zNyfizlxKPx8/WxPr0t3cc10nW/refs/heads/main/XX1psL1sTXX'
     local nameListUrl = 'URL DE LA LISTA DE CHAR NAMES'
     local vipScriptUrl = 'URL QUE CARGA EL SCRIPT PRINCIPAL'
     local vntmodal = 'https://pastebin.com/raw/g4PYXk4M' -- URL DE LA VENTANA MODAL XD
