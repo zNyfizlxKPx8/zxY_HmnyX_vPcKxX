@@ -928,8 +928,6 @@ UI.Separator()
 end)
 
 -- SCRIPT: PushMax Wall (CON WALL) - INDEPENDIENTE
---@diagnostic disable: undefined-global
-setDefaultTab("Main")
 
 local panelName = "pushmaxWall"
 local ui = setupUI([[
