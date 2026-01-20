@@ -919,6 +919,7 @@ end)
 
 end)
 
+setDefaultTab("Cave")
 --====================================================
 --  Death Limit System - Creado por **Undersky**
 --  Apaga CaveBot y TargetBot al superar X muertes.
