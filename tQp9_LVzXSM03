@@ -719,6 +719,7 @@ macro(20, function()
     delay(2000)
 end)
 
+setDefaultTab("Main")
 -- SCRIPT: PushMax Wall (CON WALL) - INDEPENDIENTE
 --@diagnostic disable: undefined-global
 setDefaultTab("Main")
