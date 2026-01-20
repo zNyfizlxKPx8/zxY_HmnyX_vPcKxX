@@ -1825,6 +1825,7 @@ end
 end)
 
 -- Task Tracked
+setDefaultTab('Target')
 local labelmonster = UI.Label("*~Seguimiento De Task~*")
 labelmonster:setColor("#00FFFF") -- celeste
 --~~Script by Undersky~~--
