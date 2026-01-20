@@ -928,7 +928,7 @@ UI.Separator()
 end)
 
 -- SCRIPT: PushMax Wall (CON WALL) - INDEPENDIENTE
-
+setDefaultTab("Spell")
 local panelName = "pushmaxWall"
 local ui = setupUI([[
 Panel
