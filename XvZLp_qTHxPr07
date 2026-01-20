@@ -241,14 +241,10 @@ for _, healingInfo in ipairs({storage.healing1, storage.healing2}) do
     local spellText = healingInfo.text:lower()
     local spellCost = ({
       ["exura"] = 20,
-      ["exura vita"] = 160,
       ["exura gran"] = 70,
-      ["exura san"] = 160,
       ["exana mort"] = 65,
       ["exura gran ico"] = 200,
-      ["exura ico"] = 40,
-      ["exura gran san"] = 210,
-      ["exura sio"] = 140
+      ["exura ico"] = 40
     })[spellText] or 0
 
     -- Solo lanzar el hechizo si tienes suficiente mana
