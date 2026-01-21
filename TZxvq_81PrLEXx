@@ -465,9 +465,11 @@ npcTradeWindow.npcTradeClose.onClick = function()
   npcTradeWindow:hide()
 end
 
+
 -- ==========================
--- DETECCION AUTOMATICA NPCs
+-- DETECCIÓN AUTOMÁTICA DE NPCs
 -- ==========================
+
 local currentNpc = nil
 local isTradeVisible = false
 
@@ -483,55 +485,59 @@ macro(200, function()
 
   if npcFound and not isTradeVisible then
     currentNpc = npcFound:getName()
-    tradeWindow:show()
-    tradeWindow:raise()
-    tradeWindow:focus()
+    npcTradeWindow:show()
+    npcTradeWindow:raise()
     isTradeVisible = true
   elseif not npcFound and isTradeVisible then
-    tradeWindow:hide()
+    npcTradeWindow:hide()
     isTradeVisible = false
     currentNpc = nil
   end
 end)
 
--- Animacion de brillo para el titulo
-local titleLabel = tradeWindow.tradeTitle
-local text = "NPC Comerciante"
-local glowPosition = 1
-local glowDirection = 1
+-- ==========================
+-- ANIMACIÓN DE TÍTULO BRILLANTE
+-- ==========================
+
+local titleLabelAdd = addNpcWindow.addNpcTitle
+local textAdd = "Agregar NPC"
+local glowPosAdd = 1
+local glowDirAdd = 1
 
 macro(50, function()
-  local numChars = #text
-  local glowRange = math.max(1, math.floor(numChars / 10))
-  local coloredText = {}
-
-  for i = 1, numChars do
-    local char = text:sub(i, i)
-    local color = "#00FFFF" -- Color base
-    if math.abs(i - glowPosition) <= glowRange then
-      color = "#BFFFFF" -- Color de brillo
-    end
-    table.insert(coloredText, char)
-    table.insert(coloredText, color)
+  local colored = {}
+  for i = 1, #textAdd do
+    local c = textAdd:sub(i,i)
+    local color = "#00FFFF"
+    if math.abs(i - glowPosAdd) <= 1 then color = "#BFFFFF" end
+    table.insert(colored, c)
+    table.insert(colored, color)
   end
-
-  glowPosition = glowPosition + glowDirection
-  if glowPosition > numChars then
-    glowPosition = numChars - 1
-    glowDirection = -1
-  elseif glowPosition < 1 then
-    glowPosition = 2
-    glowDirection = 1
-  end
-
-  if titleLabel then
-    titleLabel:setColoredText(coloredText)
-  end
+  glowPosAdd = glowPosAdd + glowDirAdd
+  if glowPosAdd > #textAdd then glowPosAdd = #textAdd - 1 glowDirAdd = -1
+  elseif glowPosAdd < 1 then glowPosAdd = 2 glowDirAdd = 1 end
+  titleLabelAdd:setColoredText(colored)
 end)
 
--- ===============================
--- SCRIPT CREADO BY UNDERSKY
--- ===============================
+local titleLabelTrade = npcTradeWindow.npcTradeTitle
+local textTrade = "NPC Comerciante"
+local glowPosTrade = 1
+local glowDirTrade = 1
+
+macro(50, function()
+  local colored = {}
+  for i = 1, #textTrade do
+    local c = textTrade:sub(i,i)
+    local color = "#00FFFF"
+    if math.abs(i - glowPosTrade) <= 1 then color = "#BFFFFF" end
+    table.insert(colored, c)
+    table.insert(colored, color)
+  end
+  glowPosTrade = glowPosTrade + glowDirTrade
+  if glowPosTrade > #textTrade then glowPosTrade = #textTrade - 1 glowDirTrade = -1
+  elseif glowPosTrade < 1 then glowPosTrade = 2 glowDirTrade = 1 end
+  titleLabelTrade:setColoredText(colored)
+end)
 
 -- Girar Script creado por Madgenius
 local actionUI = setupUI([[
