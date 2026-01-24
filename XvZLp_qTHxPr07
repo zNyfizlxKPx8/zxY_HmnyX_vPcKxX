@@ -385,7 +385,7 @@ macro(500, "Haste", function()
 end)
 
 -- Tira Haste Cuando No Detecte Monster
-local spellHaste = "Utani Gran Hur"
+local spellHaste = "utani tempo hur"
 local hasteInPz = true -- Usar haste en PZ.
 
 macro(500, "Haste NO Monsters", function()
