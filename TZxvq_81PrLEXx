@@ -1897,7 +1897,7 @@ end)
 -- Agregar macros a la lista
 table.insert(listaMacros, follow)
 table.insert(listaMacros, holdtMacro)
-table.insert(listaMacros, holdMwIcon)
+table.insert(listaMacros, holdMacro)
 table.insert(listaMacros, dropitem)
 table.insert(listaMacros, fuego)
 table.insert(listaMacros, lastexMacro)
@@ -1923,7 +1923,7 @@ for _, mac in ipairs(listaMacros) do
         checkbox:setTooltip("Mantiene el ataque al player que estes atacando.")
     end
    -- Tooltip para "holdMwall"
-    if mac.switch:getText() == "HoldMwall" then
+    if mac.switch:getText() == "Hold Mw" then
         checkbox:setTooltip("Mantiene las Magic wall o Tera, creando una marca.")
     end
      -- Tooltip para "dropitem"
