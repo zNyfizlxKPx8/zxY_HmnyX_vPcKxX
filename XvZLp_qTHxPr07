@@ -268,7 +268,7 @@ end
 
 -- Crear 2 widgets de curación
 for _, healingInfo in ipairs({storage.healing1, storage.healing2}) do
-  local healingmacro = macro(600, function()
+  local healingmacro = macro(500, function()
     local hp = player:getHealthPercent()
     local mana = player:getMana()
 
@@ -319,7 +319,7 @@ if type(storage.manaitem2) ~= "table" then
 end
 
 for i, healingInfo in ipairs({storage.hpitem1, storage.hpitem2, storage.manaitem1, storage.manaitem2}) do
-  local healingmacro = macro(800, function()
+  local healingmacro = macro(500, function()
     local hp = i <= 2 and player:getHealthPercent() or math.min(100, math.floor(100 * (player:getMana() / player:getMaxMana())))
     if healingInfo.max >= hp and hp >= healingInfo.min then
       if TargetBot then 
@@ -346,32 +346,11 @@ if g_game.getClientVersion() < 860 then
   UI.Label("In old tibia potions & runes work only when you have backpack with them opened")
 end
 UI.Separator()
--- Utamo Vita
-local labelutamo = UI.Label("Utamo Vita")
-labelutamo:setColor("#00FFFF") -- celeste
-
-UI.TextEdit(storage.manaShield or "utamo vita", function(widget, newText)
-  storage.manaShield = newText
-end)
-
-local lastManaShield = 0
-
-macro(20, "Mana Shield", function() 
-  if not hasManaShield() and lastManaShield + 1000 < now then  -- Si no tienes el hechizo activo y han pasado 500ms
-    if TargetBot then 
-      TargetBot.saySpell(storage.manaShield) -- Usa TargetBot si está activo
-    else
-      say(storage.manaShield)
-    end
-    lastManaShield = now -- Guarda el tiempo del último casteo
-  end
-end)
-
 -- Haste
 local labelhaste = UI.Label("Haste")
 labelhaste:setColor("#00FFFF") -- celeste
 
-UI.TextEdit(storage.hasteSpell or "utani gran hur", function(widget, newText)
+UI.TextEdit(storage.hasteSpell or "utani tempo hur", function(widget, newText)
   storage.hasteSpell = newText
 end)
 
@@ -386,7 +365,7 @@ end)
 
 -- Tira Haste Cuando No Detecte Monster
 local spellHaste = "utani tempo hur"
-local hasteInPz = true -- Usar haste en PZ.
+local hasteInPz = false -- Usar haste en PZ.
 
 macro(500, "Haste NO Monsters", function()
     if not hasteInPz and isInPz() then 
@@ -414,7 +393,7 @@ end)
 -- Antiparalyze
 local labelparalyze = UI.Label("Antiparalyze")
 labelparalyze:setColor("#00FFFF") -- celeste
-UI.TextEdit(storage.antiParalyze or "utani gran hur", function(widget, newText)
+UI.TextEdit(storage.antiParalyze or "utani tempo hur", function(widget, newText)
   storage.antiParalyze = newText
 end)
 
