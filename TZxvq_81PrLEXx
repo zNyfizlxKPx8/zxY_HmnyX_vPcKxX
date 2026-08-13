@@ -61,6 +61,7 @@
 
 
 
+
 -- ============================================
 -- Proteccion De Scripts (IP PREFIJO)
 -- ============================================
@@ -2960,7 +2961,7 @@ UIWidget
   background-color: black
   opacity: 0.8
   padding: 0 5
-  focusable: true
+  focusable: false
   phantom: false
   draggable: true
   text-auto-resize: true
